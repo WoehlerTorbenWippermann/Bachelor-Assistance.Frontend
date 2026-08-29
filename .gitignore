@@ -1,0 +1,43 @@
+# ── Dependencies ─────────────────────────────────────────────
+node_modules/
+
+# ── Secrets / lokale Konfiguration ───────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Laufzeit / temporäre Dateien ─────────────────────────────
+uploads/
+tmp/
+temp/
+*.tmp
+# generierte Audio-Dateien (gTTS/ffmpeg)
+*.mp3
+*.wav
+
+# ── Build / Cache ────────────────────────────────────────────
+dist/
+build/
+.cache/
+.parcel-cache/
+coverage/
+
+# ── Editor / IDE ─────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Betriebssystem ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini

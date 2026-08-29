@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HumanAssistance – Annotationsfront</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+    <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+  </svg>
+  <h1>HumanAssistance — Annotationsfrontend</h1>
+  <div id="status-badge">
+    <div id="status-dot"></div>
+    <span id="status-text">Verbinde…</span>
+  </div>
+</header>
+
+<!-- Waiting screen -->
+<div id="waiting-screen">
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5">
+    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+  </svg>
+  <p>Warte auf Anfrage von Unity…</p>
+</div>
+
+<!-- Workspace -->
+<div id="workspace">
+  <div id="info-bar">
+    <span>Session: <b id="info-session">–</b></span>
+    <span>Frage: <b id="info-question">–</b></span>
+    <span>Ausstehend: <b id="info-queue">0</b><span id="queue-badge"></span></span>
+  </div>
+
+  <div id="main">
+
+    <!-- Canvas panel -->
+    <div id="canvas-panel">
+      <div id="canvas-toolbar">
+        <button id="btn-draw" class="active" onclick="setMode('draw')">✏️ Zeichnen</button>
+        <button id="btn-view" onclick="setMode('view')">👆 Ansicht</button>
+        <div class="sep"></div>
+        <button onclick="undoLastBox()">↩ Rückgängig</button>
+        <button onclick="clearBoxes()">🗑 Alle löschen</button>
+        <div class="sep"></div>
+        <div id="color-swatches">
+          <button class="swatch active" data-color="#4f8ef7" style="background:#4f8ef7" onclick="pickColor(this)"></button>
+          <button class="swatch"        data-color="#e05252" style="background:#e05252" onclick="pickColor(this)"></button>
+          <button class="swatch"        data-color="#3ecf8e" style="background:#3ecf8e" onclick="pickColor(this)"></button>
+          <button class="swatch"        data-color="#f5a623" style="background:#f5a623" onclick="pickColor(this)"></button>
+          <button class="swatch"        data-color="#c678dd" style="background:#c678dd" onclick="pickColor(this)"></button>
+          <button class="swatch"        data-color="#ffffff" style="background:#ffffff" onclick="pickColor(this)"></button>
+          <input  type="color" id="box-color" value="#4f8ef7" title="Eigene Farbe" onchange="pickColorFromInput(this)" />
+        </div>
+      </div>
+      <div id="canvas-wrap">
+        <div id="canvas-container">
+          <img id="base-img" alt="Unity Bild" />
+          <canvas id="draw-canvas"></canvas>
+          <canvas id="overlay-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+
+      <!-- Box list -->
+      <div class="sidebar-section">
+        <h3>Bounding Boxes</h3>
+        <div id="boxes-list">
+          <p id="boxes-empty">Noch keine Boxen gezeichnet.</p>
+        </div>
+      </div>
+
+      <!-- Audio -->
+      <div class="sidebar-section" style="flex:1; overflow-y:auto;">
+        <h3>Sprachantwort</h3>
+        <div id="audio-recorder">
+          <div id="audio-controls">
+            <button id="btn-record" onclick="startRecording()">🎙 Aufnahme starten</button>
+            <button id="btn-stop-record" onclick="stopRecording()" disabled>⏹ Stopp</button>
+            <span id="rec-indicator"><span id="rec-dot"></span><span id="rec-timer">00:00</span></span>
+          </div>
+          <audio id="audio-playback" controls style="display:none;width:100%;margin-top:8px;"></audio>
+          <p id="audio-status"></p>
+          <div id="transcript-box" style="display:none;margin-top:8px;">
+            <p style="font-size:11px;color:var(--text-muted,#888);margin:0 0 4px;">Transkript:</p>
+            <div id="transcript-display"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="sidebar-section">
+        <button id="btn-send" onclick="sendResponse()">Antwort senden →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Label modal -->
+<div id="label-modal-overlay">
+  <div id="label-modal">
+    <h2>Box-Label eingeben</h2>
+    <input type="text" id="label-input" placeholder="z.B. M.2 SSD, CPU, …" />
+    <div class="modal-actions">
+      <button id="btn-label-cancel" onclick="cancelBox()">Abbrechen</button>
+      <button id="btn-label-ok" onclick="confirmBox()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
